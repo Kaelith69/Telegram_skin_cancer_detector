@@ -3,6 +3,7 @@ from PIL import Image
 import torch
 import os
 import re
+import tempfile
 import requests
 from telegram import Update
 from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTypes
@@ -12,6 +13,11 @@ from dotenv import load_dotenv
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
+if not BOT_TOKEN:
+    raise RuntimeError("BOT_TOKEN environment variable is not set.")
+if not GEMINI_API_KEY:
+    raise RuntimeError("GEMINI_API_KEY environment variable is not set.")
 
 # Load model and processor
 processor = AutoImageProcessor.from_pretrained("Anwarkh1/Skin_Cancer-Image_Classification")
@@ -23,7 +29,7 @@ def escape_markdown(text: str) -> str:
     return re.sub(f'([{re.escape(escape_chars)}])', r'\\\1', text)
 
 # Fetch condition info from Gemini
-def fetch_condition_info(condition: str) -> (str, str):
+def fetch_condition_info(condition: str) -> tuple[str, str]:
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
 
     prompt = (
@@ -40,7 +46,7 @@ def fetch_condition_info(condition: str) -> (str, str):
     data = {"contents": [{"parts": [{"text": prompt}]}]}
 
     try:
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.post(url, headers=headers, json=data, timeout=15)
         response.raise_for_status()
         full_text = response.json()["candidates"][0]["content"]["parts"][0]["text"]
         lines = full_text.strip().split('\n', 1)
@@ -68,10 +74,13 @@ def format_prediction(label: str, confidence: float, safety: str, info: str) -> 
 
 # Handle incoming image
 async def classify_image(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.message is None:
+        return
     if update.message.photo:
         print(f"[EVENT] Received photo: message_id={update.message.message_id}")
         photo = await update.message.photo[-1].get_file()
-        image_path = f"{update.message.message_id}.jpg"
+        fd, image_path = tempfile.mkstemp(suffix=".jpg")
+        os.close(fd)  # close fd so download_to_drive can open the path for writing
         await photo.download_to_drive(image_path)
 
         try:
@@ -103,21 +112,12 @@ async def classify_image(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("📎 Please send a clear photo of a skin lesion.")
 
 # Start the bot
-async def main():
+def main():
     app = ApplicationBuilder().token(BOT_TOKEN).build()
     app.add_handler(MessageHandler(filters.PHOTO, classify_image))
     print("🤖 Skin Diagnosis Bot is live.")
-    await app.run_polling(close_loop=False)
+    app.run_polling()
 
 # Entry point
 if __name__ == "__main__":
-    import asyncio
-    try:
-        asyncio.run(main())
-    except RuntimeError as e:
-        if "already running" in str(e):
-            import nest_asyncio
-            nest_asyncio.apply()
-            asyncio.get_event_loop().run_until_complete(main())
-        else:
-            raise
+    main()
