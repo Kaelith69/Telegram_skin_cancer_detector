@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="320" viewBox="0 0 820 320" role="img" aria-label="System Architecture Diagram">
+  <defs>
+    <linearGradient id="arcBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#071318"/>
+      <stop offset="100%" stop-color="#0a1f2e"/>
+    </linearGradient>
+    <linearGradient id="boxTeal" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0f2a36"/>
+      <stop offset="100%" stop-color="#082028"/>
+    </linearGradient>
+    <linearGradient id="boxBlue" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0f1f3a"/>
+      <stop offset="100%" stop-color="#081428"/>
+    </linearGradient>
+    <marker id="arcArrow" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#10B981"/>
+    </marker>
+    <marker id="arcArrowBlue" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563EB"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="820" height="320" fill="url(#arcBg)" rx="14"/>
+
+  <!-- Title -->
+  <text x="410" y="30" font-family="'Segoe UI', Arial, sans-serif"
+        font-size="15" font-weight="700" fill="#a8d8d4" text-anchor="middle"
+        letter-spacing="1">SYSTEM ARCHITECTURE</text>
+  <line x1="120" y1="38" x2="700" y2="38" stroke="#0B8F87" stroke-width="0.5" opacity="0.5"/>
+
+  <!-- Layer labels -->
+  <text x="14" y="98"  font-family="Arial, sans-serif" font-size="9" fill="#2563EB" opacity="0.7"
+        writing-mode="tb" transform="rotate(-90,14,98)">USER LAYER</text>
+  <text x="14" y="198" font-family="Arial, sans-serif" font-size="9" fill="#0B8F87" opacity="0.7"
+        writing-mode="tb" transform="rotate(-90,14,198)">PROCESSING</text>
+  <text x="14" y="270" font-family="Arial, sans-serif" font-size="9" fill="#10B981" opacity="0.7"
+        writing-mode="tb" transform="rotate(-90,14,270)">EXTERNAL</text>
+
+  <!-- Box 1: User / Telegram (top-left) -->
+  <rect x="30"  y="55" width="165" height="110" rx="10" fill="url(#boxBlue)" stroke="#2563EB" stroke-width="1.5"/>
+  <text x="112" y="83"  font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="700" fill="#6ec6f5" text-anchor="middle">📱 Telegram Client</text>
+  <line x1="50" y1="90" x2="175" y2="90" stroke="#2563EB" stroke-width="0.5" opacity="0.4"/>
+  <text x="112" y="106" font-family="Arial, sans-serif" font-size="10" fill="#6b8a99" text-anchor="middle">User sends photo</text>
+  <text x="112" y="120" font-family="Arial, sans-serif" font-size="10" fill="#6b8a99" text-anchor="middle">Bot API (polling)</text>
+  <text x="112" y="134" font-family="Arial, sans-serif" font-size="10" fill="#6b8a99" text-anchor="middle">MarkdownV2 reply</text>
+  <text x="112" y="148" font-family="Arial, sans-serif" font-size="9.5" fill="#2563EB" text-anchor="middle">run_polling()</text>
+
+  <!-- Arrow 1→2 -->
+  <path d="M 195 110 L 265 110" stroke="#10B981" stroke-width="1.8"
+        fill="none" marker-end="url(#arcArrow)"/>
+  <text x="230" y="105" font-family="Arial, sans-serif" font-size="8.5" fill="#6b8a99" text-anchor="middle">PHOTO update</text>
+
+  <!-- Box 2: Bot Handler (top-center) -->
+  <rect x="267" y="55" width="185" height="110" rx="10" fill="url(#boxTeal)" stroke="#0B8F87" stroke-width="1.5"/>
+  <text x="359" y="83"  font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="700" fill="#a8d8d4" text-anchor="middle">🤖 Bot Handler</text>
+  <line x1="287" y1="90" x2="432" y2="90" stroke="#0B8F87" stroke-width="0.5" opacity="0.4"/>
+  <text x="359" y="106" font-family="Arial, sans-serif" font-size="10" fill="#6b8a99" text-anchor="middle">python-telegram-bot v20</text>
+  <text x="359" y="120" font-family="Arial, sans-serif" font-size="10" fill="#6b8a99" text-anchor="middle">ApplicationBuilder</text>
+  <text x="359" y="134" font-family="Arial, sans-serif" font-size="10" fill="#6b8a99" text-anchor="middle">classify_image()</text>
+  <text x="359" y="148" font-family="Arial, sans-serif" font-size="9.5" fill="#0B8F87" text-anchor="middle">MessageHandler(PHOTO)</text>
+
+  <!-- Arrow 2→3 -->
+  <path d="M 452 110 L 520 110" stroke="#10B981" stroke-width="1.8"
+        fill="none" marker-end="url(#arcArrow)"/>
+  <text x="486" y="105" font-family="Arial, sans-serif" font-size="8.5" fill="#6b8a99" text-anchor="middle">PIL Image</text>
+
+  <!-- Box 3: ViT Model (top-right) -->
+  <rect x="522" y="55" width="185" height="110" rx="10" fill="url(#boxTeal)" stroke="#0B8F87" stroke-width="1.5"/>
+  <text x="614" y="83"  font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="700" fill="#a8d8d4" text-anchor="middle">🤗 ViT Model</text>
+  <line x1="542" y1="90" x2="687" y2="90" stroke="#0B8F87" stroke-width="0.5" opacity="0.4"/>
+  <text x="614" y="106" font-family="Arial, sans-serif" font-size="10" fill="#6b8a99" text-anchor="middle">AutoImageProcessor</text>
+  <text x="614" y="120" font-family="Arial, sans-serif" font-size="10" fill="#6b8a99" text-anchor="middle">AutoModelForImageClassification</text>
+  <text x="614" y="134" font-family="Arial, sans-serif" font-size="10" fill="#6b8a99" text-anchor="middle">logits → softmax</text>
+  <text x="614" y="148" font-family="Arial, sans-serif" font-size="9.5" fill="#0B8F87" text-anchor="middle">Anwarkh1/Skin_Cancer-*</text>
+
+  <!-- Arrow 3 down to temp -->
+  <path d="M 614 165 L 614 210" stroke="#10B981" stroke-width="1.5"
+        fill="none" marker-end="url(#arcArrow)"/>
+  <text x="625" y="192" font-family="Arial, sans-serif" font-size="8.5" fill="#6b8a99">label + conf</text>
+
+  <!-- Box 4: Temp File Store (bottom-center-right) -->
+  <rect x="267" y="210" width="160" height="80" rx="10" fill="url(#boxTeal)" stroke="#0B8F87" stroke-width="1.2"/>
+  <text x="347" y="234" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="700" fill="#a8d8d4" text-anchor="middle">💾 Temp Store</text>
+  <line x1="287" y1="240" x2="407" y2="240" stroke="#0B8F87" stroke-width="0.5" opacity="0.4"/>
+  <text x="347" y="256" font-family="Arial, sans-serif" font-size="10" fill="#6b8a99" text-anchor="middle">tempfile.mkstemp()</text>
+  <text x="347" y="270" font-family="Arial, sans-serif" font-size="10" fill="#6b8a99" text-anchor="middle">download_to_drive()</text>
+  <text x="347" y="282" font-family="Arial, sans-serif" font-size="9.5" fill="#10B981" text-anchor="middle">deleted in finally{}</text>
+
+  <!-- Arrow 3 down-left to temp -->
+  <path d="M 522 165 L 427 250" stroke="#0B8F87" stroke-width="1.2"
+        fill="none" stroke-dasharray="4,3" marker-end="url(#arcArrow)"/>
+
+  <!-- Arrow 2 down to temp -->
+  <path d="M 359 165 L 359 210" stroke="#0B8F87" stroke-width="1.2"
+        fill="none" stroke-dasharray="4,3" marker-end="url(#arcArrow)"/>
+  <text x="370" y="192" font-family="Arial, sans-serif" font-size="8.5" fill="#6b8a99">write</text>
+
+  <!-- Box 5: Gemini API (bottom-right) -->
+  <rect x="560" y="210" width="180" height="80" rx="10" fill="url(#boxBlue)" stroke="#2563EB" stroke-width="1.5"/>
+  <text x="650" y="234" font-family="'Segoe UI', Arial, sans-serif" font-size="12" font-weight="700" fill="#6ec6f5" text-anchor="middle">✨ Gemini 2.0 Flash</text>
+  <line x1="580" y1="240" x2="720" y2="240" stroke="#2563EB" stroke-width="0.5" opacity="0.4"/>
+  <text x="650" y="256" font-family="Arial, sans-serif" font-size="10" fill="#6b8a99" text-anchor="middle">fetch_condition_info()</text>
+  <text x="650" y="270" font-family="Arial, sans-serif" font-size="10" fill="#6b8a99" text-anchor="middle">safety label + explanation</text>
+  <text x="650" y="282" font-family="Arial, sans-serif" font-size="9.5" fill="#2563EB" text-anchor="middle">15 s timeout</text>
+
+  <!-- Arrow: ViT result → Gemini -->
+  <path d="M 707 165 L 650 210" stroke="#2563EB" stroke-width="1.5"
+        fill="none" marker-end="url(#arcArrowBlue)"/>
+  <text x="700" y="196" font-family="Arial, sans-serif" font-size="8.5" fill="#6b8a99">label text</text>
+
+  <!-- Bottom accent -->
+  <rect y="313" width="820" height="7" rx="3" fill="#0B8F87" opacity="0.6"/>
+</svg>
